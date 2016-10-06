@@ -1,8 +1,5 @@
 ﻿using ExampleGrid.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace ExampleGrid.Controllers
@@ -20,11 +17,6 @@ namespace ExampleGrid.Controllers
             };
 
             return View(employees);
-        }
-
-        public ActionResult Edit(int id)
-        {
-            return Index();
         }
     }
 }
