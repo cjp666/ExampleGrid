@@ -1,0 +1,85 @@
+﻿@model IEnumerable<ExampleGrid.Models.Employee>
+
+<h2>Employees</h2>
+
+@{
+    ViewBag.Title = "WebGrid Example";
+    var grid = new WebGrid(source: Model, canSort: true, defaultSort: "Salary");
+}
+
+@grid.GetHtml(
+    tableStyle: "webgrid-table",
+    headerStyle: "webgrid-header",
+    footerStyle: "webgrid-footer",
+    alternatingRowStyle: "webgrid-alternating-row",
+    selectedRowStyle: "webgrid-selected-row",
+    rowStyle: "webgrid-row-style", 
+    columns: grid.Columns(
+        grid.Column(columnName: "Name", header: "Employee Name"),
+        grid.Column(columnName: "Designation", header: "Employee Designation"),
+        grid.Column(columnName: "Gender", header: "Employee Gender"),
+        grid.Column(columnName: "Salary", header: "Salary"),
+        grid.Column(columnName: "City", header: "City"),
+        grid.Column(columnName: "State", header: "State"),
+        grid.Column(columnName: "Zip", header: "Zip"),
+        grid.Column(header: "", format: (item) =>
+        {
+            var link = Html.ActionLink("View Site", "Edit", new { id = item.Id });
+            return link;
+        }),
+        grid.Column(columnName: "Priority", header: "Priority", format: @<text>
+            @Html.DropDownList("Priority", new List<SelectListItem> {
+                new SelectListItem { Value = "1", Text = "11" },
+                new SelectListItem { Value = "2", Text = "12" },
+                new SelectListItem { Value = "3", Text = "13" },
+                new SelectListItem { Value = "4", Text = "14" },
+                new SelectListItem { Value = "5", Text = "15" }
+            })
+            </text>
+        )
+))
+
+<style type="text/css">
+    .webgrid-table {
+        font-family: Arial,Helvetica,sans-serif;
+        font-size: 14px;
+        font-weight: normal;
+        width: 650px;
+        display: table;
+        border-collapse: collapse;
+        border: solid px #C5C5C5;
+        background-color: white;
+    }
+
+        .webgrid-table td, th {
+            border: 1px solid #C5C5C5;
+            padding: 3px 7px 2px;
+        }
+
+    .webgrid-header, .webgrid-header a {
+        background-color: #0094ff;
+        color: #ffffff;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .webgrid-footer {
+    }
+
+    .webgrid-row-style {
+        padding: 3px 7px 2px;
+    }
+
+    .webgrid-alternating-row {
+        background-color: azure;
+        padding: 3px 7px 2px;
+    }
+
+    .col1Width {
+        width: 155px;
+    }
+
+    .col2Width {
+        width: 220px;
+    }
+</style>
