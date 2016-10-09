@@ -4,8 +4,6 @@
     ViewBag.Title = "Index";
 }
 
-<link href="~/Content/bootstrap.css" rel="stylesheet" />
-
 <h2>Index</h2>
 
 <div class="row">
@@ -29,9 +27,9 @@
                     foreach (var attachment in documentType.SiteEmailAttachment)
                     {
                         <tr>
-                            <td class="trim-text">@documentType.DocumentType</td>
                             <td class="trim-text">@attachment.OriginalFileName</td>
                             <td class="trim-text">@attachment.CustomFileName</td>
+                            <td class="trim-text">@documentType.DocumentType</td>
                         </tr>
                     }
                 }
@@ -45,21 +43,49 @@
         <div id="docTreeView">
             @foreach (var documentType in Model.DocumentSummary)
             {
-                <div class="row" dropzone="move">
-                    <div class="col-md-1"><i class="fa fa-folder-open"></i></div>
-                    <div class="col-md-11 trim-text">@documentType.DocumentType</div>
-                </div>
-                foreach (var attachment in documentType.SiteEmailAttachment)
-                {
-                    <div class="row" draggable="true">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-1"><img src="~/Content/images/FileTypes/@(attachment.FileType).png" /></div>
-                        <div class="col-md-3 trim-text">@attachment.OriginalFileName</div>
-                        <div class="col-md-3 trim-text">@attachment.CustomFileName</div>
-                        <div class="col-md-3 trim-text">@attachment.DateReceived.ToString("dd/MM/yyyy HH:mm")</div>
+                <div class="row" id="@(documentType.DocumentId)" dropzone="move" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <div id="@(documentType.DocumentId)_Folder" class="col-md-1"><img src="~/Content/images/FileTypes/_blank.png" /></div>
+                    <div id="@(documentType.DocumentId)_Group" class="col-md-11 trim-text">
+                        @documentType.DocumentType
+                        @foreach (var attachment in documentType.SiteEmailAttachment)
+                        {
+                            <div class="row" id="attachment@(attachment.Id)" draggable="true" ondragstart="drag(event)">
+                                <div class="col-md-1"></div>
+                                <div class="col-md-1"><img src="~/Content/images/FileTypes/@(attachment.FileType).png" /></div>
+                                <div class="col-md-3 trim-text">@attachment.OriginalFileName</div>
+                                <div class="col-md-3 trim-text">@attachment.CustomFileName</div>
+                                <div class="col-md-3 trim-text">@attachment.DateReceived.ToString("dd/MM/yyyy HH:mm")</div>
+                            </div>
+                        }
                     </div>
-                }
+                </div>
             }
         </div>
     </div>
 </div>
+
+<script>
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+
+        var targetId = ev.target.id;
+        var t = $("#" + targetId);
+
+        ev.target.appendChild(document.getElementById(data));
+
+        console.log('target: ' + targetId + ', source: ' + data);
+
+        $.post('@Url.Action("MoveDocument", "DocumentList")', { targetId: targetId, sourceId: data });
+
+        // debugger;
+    }
+</script>

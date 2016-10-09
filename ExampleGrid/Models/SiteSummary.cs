@@ -18,6 +18,8 @@ namespace ExampleGrid.Models
     {
         public string DocumentType { get; set; }
 
+        public string DocumentId { get; set; }
+
         public List<EmailAttachment> SiteEmailAttachment { get; set; } = new List<EmailAttachment>();
     }
 
