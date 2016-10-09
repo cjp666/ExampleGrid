@@ -1,0 +1,65 @@
+﻿@model ExampleGrid.Models.SiteSummary
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<h2>Index</h2>
+
+<div class="row">
+    <div class="col-md-5">
+        <table id="docgrid">
+            <colgroup>
+                <col />
+                <col />
+                <col />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th data-field="OriginalFileName">Original Filename</th>
+                    <th data-field="CustomFileName">Custom Filename</th>
+                    <th data-field="DocType">Documnet Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var documentType in Model.DocumentSummary)
+                {
+                    foreach (var attachment in documentType.SiteEmailAttachment)
+                    {
+                        <tr>
+                            <td class="trim-text">@documentType.DocumentType</td>
+                            <td class="trim-text">@attachment.OriginalFileName</td>
+                            <td class="trim-text">@attachment.CustomFileName</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-5">
+        <div id="docTreeView">
+            @foreach (var documentType in Model.DocumentSummary)
+            {
+                <div class="row" dropzone="move">
+                    <div class="col-md-1"><i class="fa fa-folder-open"></i></div>
+                    <div class="col-md-11 trim-text">@documentType.DocumentType</div>
+                </div>
+                foreach (var attachment in documentType.SiteEmailAttachment)
+                {
+                    <div class="row" draggable="true">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-1"><img src="~/Content/images/FileTypes/@(attachment.FileType).png" /></div>
+                        <div class="col-md-3 trim-text">@attachment.OriginalFileName</div>
+                        <div class="col-md-3 trim-text">@attachment.CustomFileName</div>
+                        <div class="col-md-3 trim-text">@attachment.DateReceived.ToString("dd/MM/yyyy HH:mm")</div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

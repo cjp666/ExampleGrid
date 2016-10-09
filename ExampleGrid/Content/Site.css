@@ -22,3 +22,10 @@ select,
 textarea {
     max-width: 280px;
 }
+
+
+.trim-text {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+}
